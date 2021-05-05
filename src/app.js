@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
   }
 
-console.log(`NODE ENV : ${process.env.NODE_ENV}`)
+console.log(`TEST KEY ENV : ${process.env.TEST_KEY}`)
 
 const app = express()
 const port = process.env.PORT || 3000
