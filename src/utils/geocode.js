@@ -1,7 +1,7 @@
 const request = require('request')
 
 const geocode = (address, callback) => {
-    const API_key = "30b51a8dfccfb22be6764d466c215e14"
+    const API_key = process.env.API_KEY
     const url = `http://api.openweathermap.org/data/2.5/weather?q=${address}&units=metric&APPID=${API_key}`
     request({ url, json: true }, (error, { body }) => {
         if (error) {
