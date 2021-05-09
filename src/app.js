@@ -7,8 +7,8 @@ const forecast = require('./utils/forecast')
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
 }
+
 const app = express()
-const port = process.env.PORT || 3000
 
 // Define paths for Express config
 const publicDirectoryPath = path.join(__dirname, '../public')
@@ -46,12 +46,17 @@ app.get('/help', (req, res) => {
 })
 
 app.get('/weather', (req, res) => {
-    if (!req.query.address) {
-        return res.send({
-            error: 'You must provide an address!'
+   /* if (!(/^[a-zA-Z ]+$/).test(req.query.address)){
+        return res.status(404).send({
+            error: 'You must provide a valid address!!'
         })
+    } */
+    if (!req.query.address) {
+        return res.status(404).send({
+            error: 'You must provide an address!'
+        }) 
     }
-
+    const encodedAdress = req.query.address.replace(" " ,"%20");
     geocode(req.query.address, (error, { latitude, longitude, location } = {}) => {
         if (error) {
             return res.send({ error })
@@ -85,7 +90,7 @@ app.get('/products', (req, res) => {
 })
 
 app.get('/help/*', (req, res) => {
-    res.render('404', {
+    res.status(404).render('404', {
         title: '404',
         name: 'Andrew Mead',
         errorMessage: 'Help article not found.'
@@ -93,13 +98,13 @@ app.get('/help/*', (req, res) => {
 })
 
 app.get('*', (req, res) => {
-    res.render('404', {
+    res.status(404).render('404', {
         title: '404', 
         name: 'Andrew Mead',
         errorMessage: 'Page not found.'
     })
 })
 
-app.listen(port, () => {
-    console.log(`Server is up on port ${port}.`)
-})
+
+
+module.exports = app
